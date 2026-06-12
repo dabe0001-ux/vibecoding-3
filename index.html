@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe | 바이브코딩 클래스 — 아이디어를 작동하는 서비스로</title>
+<meta name="description" content="코드를 몰라도 만들 수 있습니다. AI와 함께 아이디어를 실제 작동하는 홈페이지와 앱으로 만드는 바이브코딩 클래스.">
+<meta property="og:title" content="Vibe | 바이브코딩 클래스">
+<meta property="og:description" content="아이디어를 말하면, 작동하는 서비스가 됩니다.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --primary:#DEDBC8;
+  --text:#E1E0CC;
+  --black:#000000;
+  --card-about:#101010;
+  --card-feature:#212121;
+  --gray4:#9CA3AF;
+  --gray5:#6B7280;
+}
+*{
+  margin:0;padding:0;box-sizing:border-box;
+  font-family:'Almarai','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);line-height:1.5;word-break:keep-all;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img,video{display:block;max-width:100%}
+.serif-italic{font-family:'Instrument Serif',serif !important;font-style:italic}
+
+/* noise utilities */
+.noise-overlay{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.bg-noise{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== word pull-up animation ===== */
+.w-clip{display:inline-block;overflow:hidden;vertical-align:bottom}
+.w-word{
+  display:inline-block;
+  transform:translateY(20px);opacity:0;
+  transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);
+}
+.pull-visible .w-word{transform:none;opacity:1}
+
+.fade-up{
+  transform:translateY(20px);opacity:0;
+  transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .9s cubic-bezier(.16,1,.3,1);
+}
+.fade-up.visible{transform:none;opacity:1}
+
+/* ============ HERO ============ */
+.hero-wrap{height:100vh;padding:16px}
+@media(min-width:768px){.hero-wrap{padding:24px}}
+.hero{
+  position:relative;width:100%;height:100%;
+  border-radius:1rem;overflow:hidden;background:#0a0a0a;
+}
+@media(min-width:768px){.hero{border-radius:2rem}}
+.hero video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+}
+.hero .noise-overlay{
+  position:absolute;inset:0;opacity:.7;mix-blend-mode:overlay;pointer-events:none;
+}
+.hero-gradient{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(0,0,0,.3),transparent,rgba(0,0,0,.6));
+}
+
+/* navbar pill */
+.hero-nav{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:10;
+  background:var(--black);
+  border-radius:0 0 1rem 1rem;
+  padding:8px 16px;
+  display:flex;gap:12px;align-items:center;
+}
+@media(min-width:640px){.hero-nav{gap:24px}}
+@media(min-width:768px){.hero-nav{border-radius:0 0 1.5rem 1.5rem;padding:8px 32px;gap:48px}}
+@media(min-width:1024px){.hero-nav{gap:56px}}
+.hero-nav a{
+  font-size:10px;color:rgba(225,224,204,.8);font-weight:400;white-space:nowrap;
+  transition:color .2s;
+}
+@media(min-width:640px){.hero-nav a{font-size:12px}}
+@media(min-width:768px){.hero-nav a{font-size:14px}}
+.hero-nav a:hover{color:#E1E0CC}
+
+/* hero bottom content */
+.hero-content{
+  position:absolute;bottom:0;left:0;right:0;z-index:5;
+  display:grid;grid-template-columns:repeat(12,1fr);
+  align-items:end;gap:16px;
+  padding:0 20px 20px;
+}
+@media(min-width:768px){.hero-content{padding:0 36px 32px}}
+.hero-title-col{grid-column:span 12}
+.hero-right-col{grid-column:span 12;padding-bottom:8px}
+@media(min-width:768px){
+  .hero-title-col{grid-column:span 8}
+  .hero-right-col{grid-column:span 4;padding-bottom:28px}
+}
+.hero-title{
+  font-size:26vw;font-weight:500;line-height:.85;letter-spacing:-.07em;
+  color:#E1E0CC;position:relative;white-space:nowrap;
+}
+@media(min-width:640px){.hero-title{font-size:24vw}}
+@media(min-width:768px){.hero-title{font-size:22vw}}
+@media(min-width:1024px){.hero-title{font-size:20vw}}
+@media(min-width:1280px){.hero-title{font-size:19vw}}
+@media(min-width:1536px){.hero-title{font-size:20vw}}
+.hero-title .last-letter{position:relative;display:inline-block}
+.hero-title .asterisk{
+  position:absolute;top:0.65em;right:-0.3em;font-size:0.31em;line-height:1;
+}
+.hero-desc{
+  color:rgba(222,219,200,.7);
+  font-size:12px;line-height:1.2;margin-bottom:20px;
+}
+@media(min-width:640px){.hero-desc{font-size:14px}}
+@media(min-width:768px){.hero-desc{font-size:16px}}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--primary);border-radius:999px;
+  padding:6px 8px 6px 22px;
+  color:#000;font-weight:500;font-size:14px;
+  transition:gap .25s;
+  cursor:pointer;border:none;
+}
+@media(min-width:640px){.cta-btn{font-size:16px}}
+.cta-btn:hover{gap:12px}
+.cta-circle{
+  width:36px;height:36px;border-radius:50%;background:var(--black);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .25s;flex-shrink:0;
+}
+@media(min-width:640px){.cta-circle{width:40px;height:40px}}
+.cta-btn:hover .cta-circle{transform:scale(1.1)}
+.cta-circle svg{width:18px;height:18px;stroke:#E1E0CC}
+
+/* ============ ABOUT ============ */
+.about{background:var(--black);padding:80px 16px}
+@media(min-width:768px){.about{padding:120px 24px}}
+.about-card{
+  background:var(--card-about);border-radius:1.5rem;
+  max-width:72rem;margin:0 auto;text-align:center;
+  padding:70px 24px;
+}
+@media(min-width:768px){.about-card{padding:110px 60px}}
+.about-label{
+  color:var(--primary);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:36px;font-weight:400;
+}
+@media(min-width:640px){.about-label{font-size:12px}}
+.about-heading{
+  font-size:30px;font-weight:400;color:#E1E0CC;
+  max-width:48rem;margin:0 auto 48px;line-height:.95;
+}
+@media(min-width:640px){.about-heading{font-size:36px;line-height:.9}}
+@media(min-width:768px){.about-heading{font-size:48px}}
+@media(min-width:1024px){.about-heading{font-size:60px}}
+@media(min-width:1280px){.about-heading{font-size:72px}}
+.about-heading .w-word{margin-right:.22em}
+.about-body{
+  color:#DEDBC8;font-size:12px;max-width:40rem;margin:0 auto;line-height:1.7;
+}
+@media(min-width:640px){.about-body{font-size:14px}}
+@media(min-width:768px){.about-body{font-size:16px}}
+.about-body .ch{opacity:.2;transition:opacity .15s linear}
+
+/* ============ FEATURES ============ */
+.features{
+  min-height:100vh;background:var(--black);position:relative;
+  padding:90px 16px 80px;
+}
+@media(min-width:768px){.features{padding:130px 24px 100px}}
+.features .bg-noise{
+  position:absolute;inset:0;opacity:.15;pointer-events:none;
+}
+.features-inner{max-width:80rem;margin:0 auto;position:relative}
+.features-header{
+  text-align:center;margin-bottom:56px;
+  font-size:20px;font-weight:400;line-height:1.25;
+}
+@media(min-width:640px){.features-header{font-size:24px}}
+@media(min-width:768px){.features-header{font-size:30px}}
+@media(min-width:1024px){.features-header{font-size:36px}}
+.features-header .line1 .w-word{margin-right:.22em;color:#E1E0CC}
+.features-header .line2 .w-word{margin-right:.22em;color:var(--gray5)}
+
+.cards{
+  display:grid;grid-template-columns:1fr;gap:12px;
+}
+@media(min-width:768px){.cards{grid-template-columns:repeat(2,1fr);gap:8px}}
+@media(min-width:1024px){.cards{grid-template-columns:repeat(4,1fr);gap:4px;height:480px}}
+.card{
+  border-radius:1.25rem;overflow:hidden;position:relative;
+  background:var(--card-feature);
+  display:flex;flex-direction:column;
+  min-height:380px;
+  transform:scale(.95);opacity:0;
+  transition:transform .8s cubic-bezier(.22,1,.36,1),opacity .8s cubic-bezier(.22,1,.36,1);
+}
+.card.visible{transform:scale(1);opacity:1}
+.card-video{padding:0;justify-content:flex-end}
+.card-video video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+}
+.card-video .video-caption{
+  position:relative;z-index:2;padding:24px;
+  color:#E1E0CC;font-size:17px;font-weight:400;
+  background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
+}
+.card-info{padding:26px 24px;gap:0}
+.card-icon{
+  width:40px;height:40px;border-radius:10px;object-fit:cover;margin-bottom:22px;
+}
+@media(min-width:640px){.card-icon{width:48px;height:48px}}
+.card-title{
+  color:#E1E0CC;font-size:17px;font-weight:700;margin-bottom:4px;
+}
+.card-num{color:var(--gray5);font-size:12px;margin-bottom:20px}
+.card-list{list-style:none;display:flex;flex-direction:column;gap:12px;flex:1}
+.card-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  color:var(--gray4);font-size:13px;line-height:1.5;
+}
+.card-list svg{
+  width:15px;height:15px;stroke:var(--primary);flex-shrink:0;margin-top:2px;
+}
+.card-more{
+  display:inline-flex;align-items:center;gap:6px;margin-top:24px;
+  color:#E1E0CC;font-size:13px;font-weight:400;
+}
+.card-more svg{
+  width:14px;height:14px;stroke:#E1E0CC;transform:rotate(-45deg);
+  transition:transform .25s;
+}
+.card-more:hover svg{transform:rotate(-45deg) translateX(3px)}
+
+/* ============ FOOTER ============ */
+footer{
+  padding:36px 24px;text-align:center;
+  color:var(--gray5);font-size:12px;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .w-word,.fade-up,.card{transform:none !important;opacity:1 !important;transition:none !important}
+  .about-body .ch{opacity:1 !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ SECTION 1: HERO ============ -->
+<section class="hero-wrap">
+  <div class="hero">
+    <video autoplay loop muted playsinline src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"></video>
+    <div class="noise-overlay"></div>
+    <div class="hero-gradient"></div>
+
+    <nav class="hero-nav">
+      <a href="#about">스토리</a>
+      <a href="#features">커리큘럼</a>
+      <a href="#features">워크숍</a>
+      <a href="#features">프로그램</a>
+      <a href="#apply">문의</a>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-title-col">
+        <h1 class="hero-title" id="hero-title">
+          <span class="w-clip"><span class="w-word">Vib<span class="last-letter">e<sup class="asterisk">*</sup></span></span></span>
+        </h1>
+      </div>
+      <div class="hero-right-col">
+        <p class="hero-desc fade-up" id="hero-desc">Vibe는 코드를 몰라도 만들고 싶은 것이 있는 사람들을 위한 바이브코딩 클래스입니다. AI와 대화하며 아이디어를 실제로 작동하는 홈페이지, 웹앱, 앱으로 만들어 갑니다.</p>
+        <a class="cta-btn fade-up" id="hero-cta" href="#apply">
+          클래스 신청
+          <span class="cta-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2: ABOUT ============ -->
+<section class="about" id="about">
+  <div class="about-card">
+    <div class="about-label">Vibe coding</div>
+    <h2 class="about-heading" data-pullup-multi>
+      <span data-seg>코드를 배우는 시간은 끝났습니다,</span>
+      <span data-seg class="serif-italic">now we build with AI.</span>
+      <span data-seg>아이디어를 말하면, 작동하는 서비스가 됩니다.</span>
+    </h2>
+    <p class="about-body" data-charreveal>지난 몇 년 사이, 만드는 방식은 완전히 달라졌습니다. 이제 중요한 것은 문법이 아니라 무엇을 만들지 아는 감각입니다. 우리는 AI와 함께 기획하고, 묻고, 고치며 진짜로 작동하는 결과물을 만들어 냅니다. 이 수업이 끝나면, 당신의 첫 서비스가 인터넷 위에 살아 있을 것입니다.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 3: FEATURES ============ -->
+<section class="features" id="features">
+  <div class="bg-noise"></div>
+  <div class="features-inner">
+    <div class="features-header" data-pullup-multi>
+      <div class="line1"><span data-seg>비전을 가진 창작자를 위한 스튜디오급 워크플로우.</span></div>
+      <div class="line2"><span data-seg>Built for pure vision. Powered by AI.</span></div>
+    </div>
+
+    <div class="cards" id="apply">
+      <!-- Card 1: video -->
+      <div class="card card-video">
+        <video autoplay loop muted playsinline src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"></video>
+        <div class="video-caption">당신의 캔버스.</div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card card-info">
+        <img class="card-icon" src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85" alt="프로젝트 스토리보드 아이콘">
+        <div class="card-title">프로젝트 스토리보드.</div>
+        <div class="card-num">01</div>
+        <ul class="card-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>아이디어 스케치부터 화면 설계까지</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>내 서비스의 페이지 구조를 한눈에</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>AI에게 그대로 전달하는 기획 문서</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>매주 눈에 보이게 쌓이는 결과물</li>
+        </ul>
+        <a class="card-more" href="#apply">자세히 보기
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card card-info">
+        <img class="card-icon" src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171741_ed9845ab-f5b2-4018-8ce7-07cc01823522.png&w=1280&q=85" alt="스마트 크리틱 아이콘">
+        <div class="card-title">스마트 크리틱.</div>
+        <div class="card-num">02</div>
+        <ul class="card-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>AI가 짚어주는 코드 리뷰와 분석</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>멘토의 크리에이티브 노트</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Cursor · Claude · Lovable 툴 연동</li>
+        </ul>
+        <a class="card-more" href="#apply">자세히 보기
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card card-info">
+        <img class="card-icon" src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="몰입 캡슐 아이콘">
+        <div class="card-title">몰입 캡슐.</div>
+        <div class="card-num">03</div>
+        <ul class="card-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>알림 없는 몰입 빌드 세션</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>분위기를 만드는 앰비언트 사운드</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>내 일정에 맞춘 루틴 싱크</li>
+        </ul>
+        <a class="card-more" href="#apply">자세히 보기
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Vibe — 바이브코딩 클래스</footer>
+
+<script>
+// ----- WordsPullUp / WordsPullUpMultiStyle: 단어 단위 분해 후 스태거 등장 -----
+function splitWords(container) {
+  container.querySelectorAll('[data-seg]').forEach(seg => {
+    const cls = seg.className;
+    const words = seg.textContent.trim().split(/\s+/);
+    seg.textContent = '';
+    words.forEach(w => {
+      const clip = document.createElement('span');
+      clip.className = 'w-clip';
+      const word = document.createElement('span');
+      word.className = 'w-word' + (cls ? ' ' + cls : '');
+      word.textContent = w;
+      clip.appendChild(word);
+      seg.appendChild(clip);
+      seg.appendChild(document.createTextNode(' '));
+    });
+  });
+}
+document.querySelectorAll('[data-pullup-multi]').forEach(splitWords);
+
+const pullObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const words = e.target.querySelectorAll('.w-word');
+    words.forEach((w, i) => { w.style.transitionDelay = (i * 0.08) + 's'; });
+    e.target.classList.add('pull-visible');
+    pullObserver.unobserve(e.target);
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('[data-pullup-multi]').forEach(el => pullObserver.observe(el));
+
+// ----- 히어로 로드 애니메이션 (스태거) -----
+window.addEventListener('load', () => {
+  const title = document.getElementById('hero-title');
+  title.querySelectorAll('.w-word').forEach((w, i) => {
+    w.style.transitionDelay = (i * 0.08) + 's';
+  });
+  title.classList.add('pull-visible');
+  setTimeout(() => document.getElementById('hero-desc').classList.add('visible'), 500);
+  setTimeout(() => document.getElementById('hero-cta').classList.add('visible'), 700);
+});
+
+// ----- About 본문: 스크롤 연동 글자 단위 리빌 (opacity 0.2 -> 1) -----
+const revealEl = document.querySelector('[data-charreveal]');
+(function initCharReveal() {
+  const text = revealEl.textContent;
+  revealEl.textContent = '';
+  [...text].forEach(c => {
+    const s = document.createElement('span');
+    s.className = 'ch';
+    s.textContent = c;
+    revealEl.appendChild(s);
+  });
+})();
+const chars = revealEl.querySelectorAll('.ch');
+function updateCharReveal() {
+  const vh = window.innerHeight;
+  const rect = revealEl.getBoundingClientRect();
+  // useScroll offset ['start 0.8','end 0.2'] 와 동일한 구간
+  const start = vh * 0.8, end = vh * 0.2;
+  const total = (start - end) + rect.height;
+  const progress = Math.min(1, Math.max(0, (start - rect.top) / total));
+  const n = chars.length;
+  chars.forEach((c, i) => {
+    const p = i / n;
+    const lo = p - 0.1, hi = p + 0.05;
+    const t = Math.min(1, Math.max(0, (progress - lo) / (hi - lo)));
+    c.style.opacity = (0.2 + t * 0.8).toFixed(3);
+  });
+}
+window.addEventListener('scroll', updateCharReveal, { passive: true });
+window.addEventListener('resize', updateCharReveal);
+updateCharReveal();
+
+// ----- Features 카드: 스케일 + 페이드 스태거 엔트런스 -----
+const cardObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const cardsArr = [...document.querySelectorAll('.card')];
+    const idx = cardsArr.indexOf(e.target);
+    e.target.style.transitionDelay = (idx * 0.15) + 's';
+    e.target.classList.add('visible');
+    cardObserver.unobserve(e.target);
+  });
+}, { rootMargin: '-100px' });
+document.querySelectorAll('.card').forEach(c => cardObserver.observe(c));
+</script>
+</body>
+</html>
