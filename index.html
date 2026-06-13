@@ -176,6 +176,42 @@ img,video{display:block;max-width:100%}
 @media(min-width:768px){.about-body{font-size:16px}}
 .about-body .ch{opacity:.2;transition:opacity .15s linear}
 
+/* ============ INSTRUCTOR ============ */
+.instructor{background:var(--black);padding:0 16px 80px}
+@media(min-width:768px){.instructor{padding:0 24px 120px}}
+.inst-card{
+  background:var(--card-about);border-radius:1.5rem;
+  max-width:72rem;margin:0 auto;
+  padding:56px 24px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px;
+}
+@media(min-width:768px){
+  .inst-card{padding:72px 60px;flex-direction:row;text-align:left;gap:56px;align-items:center}
+}
+.inst-label{
+  color:var(--primary);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:18px;font-weight:400;
+}
+@media(min-width:640px){.inst-label{font-size:12px}}
+.inst-photo{
+  flex-shrink:0;width:180px;height:180px;border-radius:50%;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(222,219,200,.25),0 0 0 8px rgba(222,219,200,.06);
+}
+@media(min-width:768px){.inst-photo{width:200px;height:200px}}
+.inst-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.inst-name{
+  font-size:30px;font-weight:400;color:#E1E0CC;line-height:1;margin-bottom:10px;
+}
+@media(min-width:768px){.inst-name{font-size:40px}}
+.inst-role{
+  color:var(--gray4);font-size:13px;letter-spacing:.04em;margin-bottom:24px;
+}
+@media(min-width:640px){.inst-role{font-size:14px}}
+.inst-quote{
+  color:#DEDBC8;font-size:20px;line-height:1.5;max-width:34rem;
+}
+@media(min-width:768px){.inst-quote{font-size:26px}}
+
 /* ============ FEATURES ============ */
 .features{
   min-height:100vh;background:var(--black);position:relative;
@@ -304,6 +340,19 @@ footer{
       <span data-seg>아이디어를 말하면, 작동하는 서비스가 됩니다.</span>
     </h2>
     <p class="about-body" data-charreveal>지난 몇 년 사이, 만드는 방식은 완전히 달라졌습니다. 이제 중요한 것은 문법이 아니라 무엇을 만들지 아는 감각입니다. 우리는 AI와 함께 기획하고, 묻고, 고치며 진짜로 작동하는 결과물을 만들어 냅니다. 이 수업이 끝나면, 당신의 첫 서비스가 인터넷 위에 살아 있을 것입니다.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 2.5: INSTRUCTOR ============ -->
+<section class="instructor" id="instructor">
+  <div class="inst-card">
+    <div class="inst-photo"><img src="images/instructor.jpg" alt="바이브코딩 클래스 강사"></div>
+    <div>
+      <div class="inst-label">Instructor</div>
+      <h2 class="inst-name">바이브코딩 <span class="serif-italic">멘토</span></h2>
+      <div class="inst-role">AI 빌드 · 노코드 실전 가이드</div>
+      <p class="inst-quote">"문법이 아니라 감각입니다. 무엇을 만들지 아는 당신 곁에서, 작동하는 결과물까지 함께 갑니다."</p>
+    </div>
   </div>
 </section>
 
