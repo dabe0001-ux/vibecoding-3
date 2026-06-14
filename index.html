@@ -3,513 +3,489 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vibe | 바이브코딩 클래스 — 아이디어를 작동하는 서비스로</title>
-<meta name="description" content="코드를 몰라도 만들 수 있습니다. AI와 함께 아이디어를 실제 작동하는 홈페이지와 앱으로 만드는 바이브코딩 클래스.">
+<title>Vibe | 바이브코딩 클래스 — 아이디어가 작동하는 장면이 되는 순간</title>
+<meta name="description" content="코드를 몰라도 만들 수 있습니다. AI와 함께 아이디어를 실제 작동하는 홈페이지와 앱으로 만드는 시네마틱 바이브코딩 클래스.">
 <meta property="og:title" content="Vibe | 바이브코딩 클래스">
 <meta property="og:description" content="아이디어를 말하면, 작동하는 서비스가 됩니다.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Serif:ital@0;1&family=Noto+Serif+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
-  --primary:#DEDBC8;
-  --text:#E1E0CC;
-  --black:#000000;
-  --card-about:#101010;
-  --card-feature:#212121;
-  --gray4:#9CA3AF;
-  --gray5:#6B7280;
+  --bg:#0B0A09;
+  --bg-2:#13110F;
+  --panel:#161311;
+  --cream:#ECE6D7;
+  --cream-dim:rgba(236,230,215,.60);
+  --cream-faint:rgba(236,230,215,.34);
+  --gold:#C9A86A;
+  --gold-bright:#E3C488;
+  --gold-soft:rgba(201,168,106,.14);
+  --line:rgba(236,230,215,.12);
+  --serif-kr:'Noto Serif KR',serif;
+  --serif:'Fraunces','Noto Serif KR',serif;
+  --italic:'Instrument Serif',serif;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
 }
-*{
-  margin:0;padding:0;box-sizing:border-box;
-  font-family:'Almarai','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--black);color:var(--text);line-height:1.5;word-break:keep-all;overflow-x:hidden}
+body{
+  background:var(--bg);color:var(--cream);
+  font-family:var(--sans);line-height:1.6;word-break:keep-all;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
 a{text-decoration:none;color:inherit}
 img,video{display:block;max-width:100%}
-.serif-italic{font-family:'Instrument Serif',serif !important;font-style:italic}
+::selection{background:var(--gold);color:#15110b}
+.italic{font-family:var(--italic);font-style:italic;font-weight:400}
+.gold{color:var(--gold)}
 
-/* noise utilities */
-.noise-overlay{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* ====== Fixed cinematic overlays ====== */
+.grain{
+  position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
 }
-.bg-noise{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.vignette{
+  position:fixed;inset:0;z-index:8900;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 42%,transparent 52%,rgba(0,0,0,.55) 100%);
 }
+/* letterbox bars (cinematic frame) */
+.bar{position:fixed;left:0;right:0;height:34px;z-index:9100;pointer-events:none;background:#000;transition:height .9s cubic-bezier(.7,0,.2,1)}
+.bar.top{top:0}.bar.bottom{bottom:0}
+@media(max-width:680px){.bar{height:20px}}
+/* scroll progress */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-bright));z-index:9200;transition:width .1s linear;box-shadow:0 0 14px rgba(201,168,106,.6)}
 
-/* ===== word pull-up animation ===== */
-.w-clip{display:inline-block;overflow:hidden;vertical-align:bottom}
-.w-word{
-  display:inline-block;
-  transform:translateY(20px);opacity:0;
-  transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);
+/* ====== Nav ====== */
+nav{
+  position:fixed;top:34px;left:0;right:0;z-index:600;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px clamp(20px,5vw,64px);
+  transition:background .4s,backdrop-filter .4s,padding .4s,border-color .4s;
+  border-bottom:1px solid transparent;
 }
-.pull-visible .w-word{transform:none;opacity:1}
+@media(max-width:680px){nav{top:20px}}
+nav.scrolled{
+  background:rgba(11,10,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--line);padding-top:14px;padding-bottom:14px;
+}
+.brand{font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:.02em;color:var(--cream)}
+.brand .dot{color:var(--gold)}
+.nav-links{display:flex;gap:34px;align-items:center;font-size:13px;letter-spacing:.06em;color:var(--cream-dim);text-transform:uppercase}
+.nav-links a{position:relative;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--gold);transition:width .35s ease}
+.nav-links a:hover{color:var(--cream)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{
+  color:var(--bg) !important;background:var(--cream);
+  padding:9px 20px;border-radius:999px;letter-spacing:.04em;
+  transition:transform .3s,background .3s,box-shadow .3s;
+}
+.nav-cta:hover{background:var(--gold-bright);transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,106,.3)}
+.nav-cta::after{display:none}
+@media(max-width:760px){.nav-links a:not(.nav-cta){display:none}}
 
-.fade-up{
-  transform:translateY(20px);opacity:0;
-  transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .9s cubic-bezier(.16,1,.3,1);
+/* ====== Hero ====== */
+.hero{position:relative;height:100vh;min-height:640px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-media{position:absolute;inset:-8% 0;z-index:0;will-change:transform}
+.hero-media video{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.06) brightness(.62)}
+.hero-tint{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(11,10,9,.55) 0%,transparent 26%,transparent 52%,rgba(11,10,9,.78) 88%,var(--bg) 100%),
+    radial-gradient(80% 60% at 20% 90%,rgba(201,168,106,.10),transparent 60%);
 }
-.fade-up.visible{transform:none;opacity:1}
+.hero-inner{position:relative;z-index:2;padding:0 clamp(20px,5vw,64px) clamp(56px,9vh,96px);width:100%}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:26px;
+}
+.eyebrow::before{content:"";width:42px;height:1px;background:var(--gold)}
+.hero h1{
+  font-family:var(--serif-kr);font-weight:300;
+  font-size:clamp(40px,8.2vw,116px);line-height:1.02;letter-spacing:-.01em;
+  color:var(--cream);max-width:15ch;
+}
+.hero h1 .italic{font-family:var(--italic);font-weight:400;color:var(--gold-bright)}
+.hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;margin-top:38px}
+.hero p{font-family:var(--sans);font-size:clamp(14px,1.4vw,16px);color:var(--cream-dim);max-width:40ch;font-weight:300}
+.cine-btn{
+  display:inline-flex;align-items:center;gap:14px;flex-shrink:0;
+  font-size:15px;letter-spacing:.04em;color:var(--cream);
+  padding:15px 16px 15px 28px;border:1px solid var(--line);border-radius:999px;
+  background:rgba(236,230,215,.03);backdrop-filter:blur(6px);
+  transition:border-color .4s,background .4s,gap .35s,transform .35s;
+}
+.cine-btn .circ{
+  width:40px;height:40px;border-radius:50%;background:var(--cream);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;transition:transform .4s,background .4s;
+}
+.cine-btn .circ svg{width:17px;height:17px}
+.cine-btn:hover{border-color:var(--gold);background:var(--gold-soft);gap:20px;transform:translateY(-2px)}
+.cine-btn:hover .circ{background:var(--gold-bright);transform:rotate(-45deg)}
+.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;
+  font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--cream-faint);
+  display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-cue .ln{width:1px;height:42px;background:linear-gradient(var(--gold),transparent);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+@media(max-width:680px){.scroll-cue{display:none}}
 
-/* ============ HERO ============ */
-.hero-wrap{height:100vh;padding:16px}
-@media(min-width:768px){.hero-wrap{padding:24px}}
-.hero{
-  position:relative;width:100%;height:100%;
-  border-radius:1rem;overflow:hidden;background:#0a0a0a;
-}
-@media(min-width:768px){.hero{border-radius:2rem}}
-.hero video{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-}
-.hero .noise-overlay{
-  position:absolute;inset:0;opacity:.7;mix-blend-mode:overlay;pointer-events:none;
-}
-.hero-gradient{
-  position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(0,0,0,.3),transparent,rgba(0,0,0,.6));
-}
+/* ====== Marquee filmstrip ====== */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;overflow:hidden;background:var(--bg-2)}
+.strip-track{display:flex;gap:48px;white-space:nowrap;width:max-content;animation:marq 32s linear infinite}
+.strip:hover .strip-track{animation-play-state:paused}
+.strip-track span{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,34px);color:var(--cream-faint);font-weight:400}
+.strip-track .star{color:var(--gold);font-style:normal}
+@keyframes marq{to{transform:translateX(-50%)}}
 
-/* navbar pill */
-.hero-nav{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:10;
-  background:var(--black);
-  border-radius:0 0 1rem 1rem;
-  padding:8px 16px;
-  display:flex;gap:12px;align-items:center;
-}
-@media(min-width:640px){.hero-nav{gap:24px}}
-@media(min-width:768px){.hero-nav{border-radius:0 0 1.5rem 1.5rem;padding:8px 32px;gap:48px}}
-@media(min-width:1024px){.hero-nav{gap:56px}}
-.hero-nav a{
-  font-size:10px;color:rgba(225,224,204,.8);font-weight:400;white-space:nowrap;
-  transition:color .2s;
-}
-@media(min-width:640px){.hero-nav a{font-size:12px}}
-@media(min-width:768px){.hero-nav a{font-size:14px}}
-.hero-nav a:hover{color:#E1E0CC}
+/* ====== Section base ====== */
+section{position:relative}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+.tag{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:12px;margin-bottom:30px}
+.tag::before{content:"";width:30px;height:1px;background:var(--gold)}
 
-/* hero bottom content */
-.hero-content{
-  position:absolute;bottom:0;left:0;right:0;z-index:5;
-  display:grid;grid-template-columns:repeat(12,1fr);
-  align-items:end;gap:16px;
-  padding:0 20px 20px;
+/* ====== About / Manifesto ====== */
+.about{padding:clamp(110px,16vh,200px) 0;background:linear-gradient(180deg,var(--bg),var(--bg-2))}
+.manifesto{
+  font-family:var(--serif-kr);font-weight:300;
+  font-size:clamp(26px,4.6vw,62px);line-height:1.28;letter-spacing:-.01em;max-width:20ch;
 }
-@media(min-width:768px){.hero-content{padding:0 36px 32px}}
-.hero-title-col{grid-column:span 12}
-.hero-right-col{grid-column:span 12;padding-bottom:8px}
-@media(min-width:768px){
-  .hero-title-col{grid-column:span 8}
-  .hero-right-col{grid-column:span 4;padding-bottom:28px}
-}
-.hero-title{
-  font-size:26vw;font-weight:500;line-height:.85;letter-spacing:-.07em;
-  color:#E1E0CC;position:relative;white-space:nowrap;
-}
-@media(min-width:640px){.hero-title{font-size:24vw}}
-@media(min-width:768px){.hero-title{font-size:22vw}}
-@media(min-width:1024px){.hero-title{font-size:20vw}}
-@media(min-width:1280px){.hero-title{font-size:19vw}}
-@media(min-width:1536px){.hero-title{font-size:20vw}}
-.hero-title .last-letter{position:relative;display:inline-block}
-.hero-title .asterisk{
-  position:absolute;top:0.65em;right:-0.3em;font-size:0.31em;line-height:1;
-}
-.hero-desc{
-  color:rgba(222,219,200,.7);
-  font-size:12px;line-height:1.2;margin-bottom:20px;
-}
-@media(min-width:640px){.hero-desc{font-size:14px}}
-@media(min-width:768px){.hero-desc{font-size:16px}}
-.cta-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--primary);border-radius:999px;
-  padding:6px 8px 6px 22px;
-  color:#000;font-weight:500;font-size:14px;
-  transition:gap .25s;
-  cursor:pointer;border:none;
-}
-@media(min-width:640px){.cta-btn{font-size:16px}}
-.cta-btn:hover{gap:12px}
-.cta-circle{
-  width:36px;height:36px;border-radius:50%;background:var(--black);
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .25s;flex-shrink:0;
-}
-@media(min-width:640px){.cta-circle{width:40px;height:40px}}
-.cta-btn:hover .cta-circle{transform:scale(1.1)}
-.cta-circle svg{width:18px;height:18px;stroke:#E1E0CC}
+.manifesto .italic{color:var(--gold-bright)}
+.about-body{margin-top:54px;max-width:52ch;font-size:clamp(15px,1.5vw,18px);color:var(--cream-dim);font-weight:300;line-height:1.95}
+.about-body .ch{opacity:.16;transition:opacity .12s linear}
 
-/* ============ ABOUT ============ */
-.about{background:var(--black);padding:80px 16px}
-@media(min-width:768px){.about{padding:120px 24px}}
-.about-card{
-  background:var(--card-about);border-radius:1.5rem;
-  max-width:72rem;margin:0 auto;text-align:center;
-  padding:70px 24px;
+/* ====== Scenes (program) ====== */
+.scenes{padding:clamp(90px,12vh,160px) 0;background:var(--bg-2)}
+.scenes-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:70px}
+.scenes-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(30px,4.4vw,58px);line-height:1.1;letter-spacing:-.01em}
+.scenes-head h2 .italic{color:var(--gold-bright)}
+.scenes-head p{max-width:34ch;color:var(--cream-dim);font-size:15px;font-weight:300}
+.scene{
+  display:grid;grid-template-columns:minmax(0,.34fr) minmax(0,1fr) minmax(0,.66fr);
+  gap:36px;align-items:start;
+  padding:46px 0;border-top:1px solid var(--line);
+  transition:background .5s;
 }
-@media(min-width:768px){.about-card{padding:110px 60px}}
-.about-label{
-  color:var(--primary);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  margin-bottom:36px;font-weight:400;
-}
-@media(min-width:640px){.about-label{font-size:12px}}
-.about-heading{
-  font-size:30px;font-weight:400;color:#E1E0CC;
-  max-width:48rem;margin:0 auto 48px;line-height:.95;
-}
-@media(min-width:640px){.about-heading{font-size:36px;line-height:.9}}
-@media(min-width:768px){.about-heading{font-size:48px}}
-@media(min-width:1024px){.about-heading{font-size:60px}}
-@media(min-width:1280px){.about-heading{font-size:72px}}
-.about-heading .w-word{margin-right:.22em}
-.about-body{
-  color:#DEDBC8;font-size:12px;max-width:40rem;margin:0 auto;line-height:1.7;
-}
-@media(min-width:640px){.about-body{font-size:14px}}
-@media(min-width:768px){.about-body{font-size:16px}}
-.about-body .ch{opacity:.2;transition:opacity .15s linear}
-
-/* ============ INSTRUCTOR ============ */
-.instructor{background:var(--black);padding:0 16px 80px}
-@media(min-width:768px){.instructor{padding:0 24px 120px}}
-.inst-card{
-  background:var(--card-about);border-radius:1.5rem;
-  max-width:72rem;margin:0 auto;
-  padding:56px 24px;
-  display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px;
-}
-@media(min-width:768px){
-  .inst-card{padding:72px 60px;flex-direction:row;text-align:left;gap:56px;align-items:center}
-}
-.inst-label{
-  color:var(--primary);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  margin-bottom:18px;font-weight:400;
-}
-@media(min-width:640px){.inst-label{font-size:12px}}
-.inst-photo{
-  flex-shrink:0;width:180px;height:180px;border-radius:50%;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(222,219,200,.25),0 0 0 8px rgba(222,219,200,.06);
-}
-@media(min-width:768px){.inst-photo{width:200px;height:200px}}
-.inst-photo img{width:100%;height:100%;object-fit:cover;display:block}
-.inst-name{
-  font-size:30px;font-weight:400;color:#E1E0CC;line-height:1;margin-bottom:10px;
-}
-@media(min-width:768px){.inst-name{font-size:40px}}
-.inst-role{
-  color:var(--gray4);font-size:13px;letter-spacing:.04em;margin-bottom:24px;
-}
-@media(min-width:640px){.inst-role{font-size:14px}}
-.inst-quote{
-  color:#DEDBC8;font-size:20px;line-height:1.5;max-width:34rem;
-}
-@media(min-width:768px){.inst-quote{font-size:26px}}
-
-/* ============ FEATURES ============ */
-.features{
-  min-height:100vh;background:var(--black);position:relative;
-  padding:90px 16px 80px;
-}
-@media(min-width:768px){.features{padding:130px 24px 100px}}
-.features .bg-noise{
-  position:absolute;inset:0;opacity:.15;pointer-events:none;
-}
-.features-inner{max-width:80rem;margin:0 auto;position:relative}
-.features-header{
-  text-align:center;margin-bottom:56px;
-  font-size:20px;font-weight:400;line-height:1.25;
-}
-@media(min-width:640px){.features-header{font-size:24px}}
-@media(min-width:768px){.features-header{font-size:30px}}
-@media(min-width:1024px){.features-header{font-size:36px}}
-.features-header .line1 .w-word{margin-right:.22em;color:#E1E0CC}
-.features-header .line2 .w-word{margin-right:.22em;color:var(--gray5)}
-
-.cards{
-  display:grid;grid-template-columns:1fr;gap:12px;
-}
-@media(min-width:768px){.cards{grid-template-columns:repeat(2,1fr);gap:8px}}
-@media(min-width:1024px){.cards{grid-template-columns:repeat(4,1fr);gap:4px;height:480px}}
-.card{
-  border-radius:1.25rem;overflow:hidden;position:relative;
-  background:var(--card-feature);
-  display:flex;flex-direction:column;
-  min-height:380px;
-  transform:scale(.95);opacity:0;
-  transition:transform .8s cubic-bezier(.22,1,.36,1),opacity .8s cubic-bezier(.22,1,.36,1);
-}
-.card.visible{transform:scale(1);opacity:1}
-.card-video{padding:0;justify-content:flex-end}
-.card-video video{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-}
-.card-video .video-caption{
-  position:relative;z-index:2;padding:24px;
-  color:#E1E0CC;font-size:17px;font-weight:400;
-  background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
-}
-.card-info{padding:26px 24px;gap:0}
-.card-icon{
-  width:40px;height:40px;border-radius:10px;object-fit:cover;margin-bottom:22px;
-}
-@media(min-width:640px){.card-icon{width:48px;height:48px}}
-.card-title{
-  color:#E1E0CC;font-size:17px;font-weight:700;margin-bottom:4px;
-}
-.card-num{color:var(--gray5);font-size:12px;margin-bottom:20px}
-.card-list{list-style:none;display:flex;flex-direction:column;gap:12px;flex:1}
-.card-list li{
-  display:flex;gap:10px;align-items:flex-start;
-  color:var(--gray4);font-size:13px;line-height:1.5;
-}
-.card-list svg{
-  width:15px;height:15px;stroke:var(--primary);flex-shrink:0;margin-top:2px;
-}
-.card-more{
-  display:inline-flex;align-items:center;gap:6px;margin-top:24px;
-  color:#E1E0CC;font-size:13px;font-weight:400;
-}
-.card-more svg{
-  width:14px;height:14px;stroke:#E1E0CC;transform:rotate(-45deg);
-  transition:transform .25s;
-}
-.card-more:hover svg{transform:rotate(-45deg) translateX(3px)}
-
-/* ============ FOOTER ============ */
-footer{
-  padding:36px 24px;text-align:center;
-  color:var(--gray5);font-size:12px;
+.scene:last-child{border-bottom:1px solid var(--line)}
+.scene:hover{background:linear-gradient(90deg,var(--gold-soft),transparent 70%)}
+.scene-no{font-family:var(--serif);font-style:italic;font-size:clamp(40px,6vw,84px);font-weight:300;color:var(--cream-faint);line-height:.8;transition:color .5s,transform .5s}
+.scene:hover .scene-no{color:var(--gold)}
+.scene-title{font-family:var(--serif-kr);font-weight:500;font-size:clamp(22px,2.6vw,32px);line-height:1.2}
+.scene-title small{display:block;font-family:var(--sans);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:14px;font-weight:600}
+.scene-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.scene-list li{display:flex;gap:14px;align-items:flex-start;color:var(--cream-dim);font-size:15px;font-weight:300;line-height:1.5}
+.scene-list li::before{content:"";flex-shrink:0;width:7px;height:7px;margin-top:8px;border-radius:50%;border:1px solid var(--gold);transition:background .4s}
+.scene:hover .scene-list li::before{background:var(--gold)}
+@media(max-width:860px){
+  .scene{grid-template-columns:1fr;gap:18px;padding:38px 0}
+  .scene-no{font-size:52px}
 }
 
+/* ====== Interlude (full-bleed video) ====== */
+.interlude{position:relative;height:74vh;min-height:440px;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center}
+.interlude-media{position:absolute;inset:-10% 0;z-index:0;will-change:transform}
+.interlude-media video{width:100%;height:100%;object-fit:cover;filter:saturate(.8) brightness(.5) contrast(1.05)}
+.interlude::after{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(80% 80% at 50% 50%,transparent 30%,rgba(11,10,9,.7) 100%),linear-gradient(var(--bg-2),transparent 18%,transparent 82%,var(--bg))}
+.interlude-quote{position:relative;z-index:2;padding:0 24px}
+.interlude-quote p{font-family:var(--serif);font-weight:300;font-size:clamp(26px,4.4vw,56px);line-height:1.25;max-width:18ch;margin:0 auto;letter-spacing:-.01em}
+.interlude-quote .italic{color:var(--gold-bright)}
+
+/* ====== Instructor ====== */
+.inst{padding:clamp(100px,15vh,190px) 0;background:linear-gradient(180deg,var(--bg),var(--bg-2))}
+.inst-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(40px,6vw,90px);align-items:center}
+@media(max-width:840px){.inst-grid{grid-template-columns:1fr;gap:48px}}
+.inst-portrait{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px}
+.inst-portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35) contrast(1.05) brightness(.92);transform:scale(1.04);transition:transform 1.2s cubic-bezier(.16,1,.3,1),filter 1.2s}
+.inst-portrait:hover img{transform:scale(1.0);filter:grayscale(0) contrast(1.02) brightness(1)}
+.inst-portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(11,10,9,.6));pointer-events:none}
+.inst-portrait .frame{position:absolute;inset:14px;border:1px solid rgba(236,230,215,.28);border-radius:3px;z-index:2;pointer-events:none}
+.inst-portrait .stamp{position:absolute;left:24px;bottom:20px;z-index:3;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--cream-dim)}
+.inst-name{font-family:var(--serif-kr);font-weight:300;font-size:clamp(40px,6vw,76px);line-height:1;letter-spacing:.01em;margin-bottom:6px}
+.inst-name .italic{font-family:var(--italic);color:var(--gold);font-size:.5em;margin-left:.3em;letter-spacing:0}
+.inst-role{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:30px}
+.inst-quote{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.5vw,30px);line-height:1.45;color:var(--cream);max-width:24ch;margin-bottom:34px}
+.inst-quote .italic{color:var(--gold-bright)}
+.inst-meta{display:flex;gap:14px;flex-wrap:wrap}
+.inst-meta span{font-size:12px;letter-spacing:.08em;color:var(--cream-dim);border:1px solid var(--line);border-radius:999px;padding:8px 16px}
+
+/* ====== Final CTA ====== */
+.final{padding:clamp(110px,18vh,220px) 0;text-align:center;background:var(--bg-2);position:relative;overflow:hidden}
+.final::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 120%,rgba(201,168,106,.16),transparent 70%)}
+.final .wrap{position:relative}
+.final h2{font-family:var(--serif);font-weight:300;font-size:clamp(34px,6vw,82px);line-height:1.08;letter-spacing:-.01em;margin-bottom:24px}
+.final h2 .italic{color:var(--gold-bright)}
+.final p{color:var(--cream-dim);font-size:16px;font-weight:300;max-width:40ch;margin:0 auto 46px}
+.final .cine-btn{justify-content:center}
+.final-contacts{margin-top:40px;display:flex;gap:28px;justify-content:center;flex-wrap:wrap;font-size:13px;letter-spacing:.06em;color:var(--cream-faint)}
+
+/* ====== Footer ====== */
+footer{padding:46px 0;border-top:1px solid var(--line);background:var(--bg)}
+.footer-inner{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.footer-inner .brand{font-size:18px}
+footer small{color:var(--cream-faint);font-size:12px;letter-spacing:.04em}
+
+/* ====== Reveal motion ====== */
+.reveal{opacity:0;transform:translateY(38px);filter:blur(6px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1),filter 1s}
+.reveal.in{opacity:1;transform:none;filter:none}
 @media(prefers-reduced-motion:reduce){
-  .w-word,.fade-up,.card{transform:none !important;opacity:1 !important;transition:none !important}
+  .reveal{opacity:1;transform:none;filter:none;transition:none}
+  .strip-track{animation:none}
   .about-body .ch{opacity:1 !important}
+  .hero-media,.interlude-media{transform:none !important}
+  .scroll-cue .ln{animation:none}
 }
 </style>
 </head>
 <body>
 
-<!-- ============ SECTION 1: HERO ============ -->
-<section class="hero-wrap">
-  <div class="hero">
+<div class="grain"></div>
+<div class="vignette"></div>
+<div class="bar top" id="bar-top"></div>
+<div class="bar bottom" id="bar-bottom"></div>
+<div class="progress" id="progress"></div>
+
+<!-- ===== Nav ===== -->
+<nav id="nav">
+  <a class="brand" href="#"># Vibe<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="#about">스토리</a>
+    <a href="#scenes">프로그램</a>
+    <a href="#instructor">강사</a>
+    <a class="nav-cta" href="#apply">클래스 신청</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-media" data-parallax="0.18">
     <video autoplay loop muted playsinline src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"></video>
-    <div class="noise-overlay"></div>
-    <div class="hero-gradient"></div>
-
-    <nav class="hero-nav">
-      <a href="#about">스토리</a>
-      <a href="#features">커리큘럼</a>
-      <a href="#features">워크숍</a>
-      <a href="#features">프로그램</a>
-      <a href="#apply">문의</a>
-    </nav>
-
-    <div class="hero-content">
-      <div class="hero-title-col">
-        <h1 class="hero-title" id="hero-title">
-          <span class="w-clip"><span class="w-word">Vib<span class="last-letter">e<sup class="asterisk">*</sup></span></span></span>
-        </h1>
-      </div>
-      <div class="hero-right-col">
-        <p class="hero-desc fade-up" id="hero-desc">Vibe는 코드를 몰라도 만들고 싶은 것이 있는 사람들을 위한 바이브코딩 클래스입니다. AI와 대화하며 아이디어를 실제로 작동하는 홈페이지, 웹앱, 앱으로 만들어 갑니다.</p>
-        <a class="cta-btn fade-up" id="hero-cta" href="#apply">
-          클래스 신청
-          <span class="cta-circle">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </span>
-        </a>
-      </div>
+  </div>
+  <div class="hero-tint"></div>
+  <div class="hero-inner">
+    <span class="eyebrow reveal">바이브코딩 클래스</span>
+    <h1 class="reveal">아이디어가<br><span class="italic">작동하는 장면</span>이<br>되는 순간</h1>
+    <div class="hero-bottom">
+      <p class="reveal">코드를 몰라도 괜찮습니다. AI와 대화하며 당신의 아이디어를 실제로 작동하는 홈페이지·웹앱·앱으로 만들어 가는, 한 편의 영화 같은 빌드 클래스.</p>
+      <a class="cine-btn reveal" href="#apply">
+        클래스 신청
+        <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
     </div>
   </div>
-</section>
+  <div class="scroll-cue"><span>Scroll</span><span class="ln"></span></div>
+</header>
 
-<!-- ============ SECTION 2: ABOUT ============ -->
+<!-- ===== Marquee ===== -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-track" id="strip">
+    <span>아이디어</span><span class="star">✦</span><span class="italic">build with AI</span><span class="star">✦</span><span>작동하는 결과물</span><span class="star">✦</span><span class="italic">your first service</span><span class="star">✦</span>
+    <span>아이디어</span><span class="star">✦</span><span class="italic">build with AI</span><span class="star">✦</span><span>작동하는 결과물</span><span class="star">✦</span><span class="italic">your first service</span><span class="star">✦</span>
+  </div>
+</div>
+
+<!-- ===== About ===== -->
 <section class="about" id="about">
-  <div class="about-card">
-    <div class="about-label">Vibe coding</div>
-    <h2 class="about-heading" data-pullup-multi>
-      <span data-seg>코드를 배우는 시간은 끝났습니다,</span>
-      <span data-seg class="serif-italic">now we build with AI.</span>
-      <span data-seg>아이디어를 말하면, 작동하는 서비스가 됩니다.</span>
-    </h2>
+  <div class="wrap">
+    <span class="tag reveal">The Story</span>
+    <h2 class="manifesto reveal">코드를 배우는 시간은 끝났습니다, <span class="italic">now we build with AI.</span> 아이디어를 말하면, 작동하는 서비스가 됩니다.</h2>
     <p class="about-body" data-charreveal>지난 몇 년 사이, 만드는 방식은 완전히 달라졌습니다. 이제 중요한 것은 문법이 아니라 무엇을 만들지 아는 감각입니다. 우리는 AI와 함께 기획하고, 묻고, 고치며 진짜로 작동하는 결과물을 만들어 냅니다. 이 수업이 끝나면, 당신의 첫 서비스가 인터넷 위에 살아 있을 것입니다.</p>
   </div>
 </section>
 
-<!-- ============ SECTION 2.5: INSTRUCTOR ============ -->
-<section class="instructor" id="instructor">
-  <div class="inst-card">
-    <div class="inst-photo"><img src="images/instructor.jpg" alt="바이브코딩 클래스 강사"></div>
-    <div>
-      <div class="inst-label">Instructor</div>
-      <h2 class="inst-name">서형민 <span class="serif-italic">mentor</span></h2>
-      <div class="inst-role">AI 빌드 · 노코드 실전 가이드</div>
-      <p class="inst-quote">"문법이 아니라 감각입니다. 무엇을 만들지 아는 당신 곁에서, 작동하는 결과물까지 함께 갑니다."</p>
+<!-- ===== Scenes / Program ===== -->
+<section class="scenes" id="scenes">
+  <div class="wrap">
+    <div class="scenes-head">
+      <h2 class="reveal">비전을 가진 창작자를 위한<br><span class="italic">스튜디오급</span> 워크플로우</h2>
+      <p class="reveal">매주 한 장면씩, 눈에 보이는 결과물이 쌓입니다. Built for pure vision, powered by AI.</p>
+    </div>
+
+    <div class="scene reveal">
+      <div class="scene-no">01</div>
+      <div class="scene-title">프로젝트 스토리보드<small>Storyboard</small></div>
+      <ul class="scene-list">
+        <li>아이디어 스케치부터 화면 설계까지</li>
+        <li>내 서비스의 페이지 구조를 한눈에</li>
+        <li>AI에게 그대로 전달하는 기획 문서</li>
+        <li>매주 눈에 보이게 쌓이는 결과물</li>
+      </ul>
+    </div>
+
+    <div class="scene reveal">
+      <div class="scene-no">02</div>
+      <div class="scene-title">스마트 크리틱<small>Smart Critique</small></div>
+      <ul class="scene-list">
+        <li>AI가 짚어주는 코드 리뷰와 분석</li>
+        <li>멘토의 크리에이티브 노트</li>
+        <li>Cursor · Claude · Lovable 툴 연동</li>
+      </ul>
+    </div>
+
+    <div class="scene reveal">
+      <div class="scene-no">03</div>
+      <div class="scene-title">몰입 캡슐<small>Focus Capsule</small></div>
+      <ul class="scene-list">
+        <li>알림 없는 몰입 빌드 세션</li>
+        <li>분위기를 만드는 앰비언트 사운드</li>
+        <li>내 일정에 맞춘 루틴 싱크</li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- ============ SECTION 3: FEATURES ============ -->
-<section class="features" id="features">
-  <div class="bg-noise"></div>
-  <div class="features-inner">
-    <div class="features-header" data-pullup-multi>
-      <div class="line1"><span data-seg>비전을 가진 창작자를 위한 스튜디오급 워크플로우.</span></div>
-      <div class="line2"><span data-seg>Built for pure vision. Powered by AI.</span></div>
-    </div>
+<!-- ===== Interlude ===== -->
+<section class="interlude">
+  <div class="interlude-media" data-parallax="0.22">
+    <video autoplay loop muted playsinline src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"></video>
+  </div>
+  <div class="interlude-quote reveal">
+    <p>여기, 당신의 <span class="italic">캔버스.</span></p>
+  </div>
+</section>
 
-    <div class="cards" id="apply">
-      <!-- Card 1: video -->
-      <div class="card card-video">
-        <video autoplay loop muted playsinline src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"></video>
-        <div class="video-caption">당신의 캔버스.</div>
+<!-- ===== Instructor ===== -->
+<section class="inst" id="instructor">
+  <div class="wrap">
+    <span class="tag reveal">Instructor</span>
+    <div class="inst-grid">
+      <div class="inst-portrait reveal" data-parallax="-0.04">
+        <img src="images/instructor.jpg" alt="바이브코딩 클래스 강사 서형민">
+        <span class="frame"></span>
+        <span class="stamp">Take 01 — Director's chair</span>
       </div>
-
-      <!-- Card 2 -->
-      <div class="card card-info">
-        <img class="card-icon" src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85" alt="프로젝트 스토리보드 아이콘">
-        <div class="card-title">프로젝트 스토리보드.</div>
-        <div class="card-num">01</div>
-        <ul class="card-list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>아이디어 스케치부터 화면 설계까지</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>내 서비스의 페이지 구조를 한눈에</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>AI에게 그대로 전달하는 기획 문서</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>매주 눈에 보이게 쌓이는 결과물</li>
-        </ul>
-        <a class="card-more" href="#apply">자세히 보기
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="card card-info">
-        <img class="card-icon" src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171741_ed9845ab-f5b2-4018-8ce7-07cc01823522.png&w=1280&q=85" alt="스마트 크리틱 아이콘">
-        <div class="card-title">스마트 크리틱.</div>
-        <div class="card-num">02</div>
-        <ul class="card-list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>AI가 짚어주는 코드 리뷰와 분석</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>멘토의 크리에이티브 노트</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Cursor · Claude · Lovable 툴 연동</li>
-        </ul>
-        <a class="card-more" href="#apply">자세히 보기
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="card card-info">
-        <img class="card-icon" src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="몰입 캡슐 아이콘">
-        <div class="card-title">몰입 캡슐.</div>
-        <div class="card-num">03</div>
-        <ul class="card-list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>알림 없는 몰입 빌드 세션</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>분위기를 만드는 앰비언트 사운드</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>내 일정에 맞춘 루틴 싱크</li>
-        </ul>
-        <a class="card-more" href="#apply">자세히 보기
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
+      <div>
+        <h2 class="inst-name reveal">서형민<span class="italic">mentor</span></h2>
+        <div class="inst-role reveal">AI 빌드 · 노코드 실전 가이드</div>
+        <p class="inst-quote reveal">"문법이 아니라 <span class="italic">감각</span>입니다. 무엇을 만들지 아는 당신 곁에서, 작동하는 결과물까지 한 장면씩 함께 갑니다."</p>
+        <div class="inst-meta reveal">
+          <span>AI 빌드 워크플로우</span>
+          <span>노코드 · 바이브코딩</span>
+          <span>1:1 밀착 멘토링</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<footer>© 2026 Vibe — 바이브코딩 클래스</footer>
+<!-- ===== Final CTA ===== -->
+<section class="final" id="apply">
+  <div class="wrap">
+    <span class="tag reveal" style="justify-content:center">Now Showing</span>
+    <h2 class="reveal">당신의 첫 서비스,<br><span class="italic">곧 상영</span>됩니다</h2>
+    <p class="reveal">아이디어를 말하면, 작동하는 장면이 됩니다.<br>클래스 신청과 함께 일정·문의를 안내드립니다.</p>
+    <a class="cine-btn reveal" href="#" id="apply-btn">
+      클래스 신청하기
+      <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+    </a>
+    <div class="final-contacts reveal">
+      <span>✉ hello@vibeclass.kr</span>
+      <span>＠ 인스타그램 DM</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a class="brand" href="#"># Vibe<span class="dot">.</span></a>
+    <small>© 2026 Vibe — 바이브코딩 클래스 · 아이디어를 작동하는 장면으로</small>
+  </div>
+</footer>
 
 <script>
-// ----- WordsPullUp / WordsPullUpMultiStyle: 단어 단위 분해 후 스태거 등장 -----
-function splitWords(container) {
-  container.querySelectorAll('[data-seg]').forEach(seg => {
-    const cls = seg.className;
-    const words = seg.textContent.trim().split(/\s+/);
-    seg.textContent = '';
-    words.forEach(w => {
-      const clip = document.createElement('span');
-      clip.className = 'w-clip';
-      const word = document.createElement('span');
-      word.className = 'w-word' + (cls ? ' ' + cls : '');
-      word.textContent = w;
-      clip.appendChild(word);
-      seg.appendChild(clip);
-      seg.appendChild(document.createTextNode(' '));
-    });
-  });
-}
-document.querySelectorAll('[data-pullup-multi]').forEach(splitWords);
-
-const pullObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const words = e.target.querySelectorAll('.w-word');
-    words.forEach((w, i) => { w.style.transitionDelay = (i * 0.08) + 's'; });
-    e.target.classList.add('pull-visible');
-    pullObserver.unobserve(e.target);
-  });
-}, { threshold: 0.2 });
-document.querySelectorAll('[data-pullup-multi]').forEach(el => pullObserver.observe(el));
-
-// ----- 히어로 로드 애니메이션 (스태거) -----
+// ----- letterbox intro -----
 window.addEventListener('load', () => {
-  const title = document.getElementById('hero-title');
-  title.querySelectorAll('.w-word').forEach((w, i) => {
-    w.style.transitionDelay = (i * 0.08) + 's';
+  requestAnimationFrame(() => {
+    document.getElementById('bar-top').style.height = '';
+    document.getElementById('bar-bottom').style.height = '';
   });
-  title.classList.add('pull-visible');
-  setTimeout(() => document.getElementById('hero-desc').classList.add('visible'), 500);
-  setTimeout(() => document.getElementById('hero-cta').classList.add('visible'), 700);
 });
 
-// ----- About 본문: 스크롤 연동 글자 단위 리빌 (opacity 0.2 -> 1) -----
+// ----- nav scrolled state + scroll progress -----
+const nav = document.getElementById('nav');
+const progress = document.getElementById('progress');
+function onScroll(){
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive:true });
+onScroll();
+
+// stagger sibling reveals for a cinematic cascade
+document.querySelectorAll('.hero-inner .reveal, .scenes-head .reveal, .inst-grid .reveal, .final .reveal').forEach((el,i) => {
+  el.style.transitionDelay = (i % 4 * 0.09) + 's';
+});
+
+// ----- reveal on scroll (rect-based; robust even if IntersectionObserver is unavailable) -----
+let revealEls = [...document.querySelectorAll('.reveal')];
+function checkReveals(){
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  // failsafe: degenerate viewport → never leave content hidden
+  if (!vh){ revealEls.forEach(el => el.classList.add('in')); revealEls = []; return; }
+  for (let i = revealEls.length - 1; i >= 0; i--){
+    const r = revealEls[i].getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0){ revealEls[i].classList.add('in'); revealEls.splice(i,1); }
+  }
+}
+window.addEventListener('scroll', checkReveals, { passive:true });
+window.addEventListener('resize', checkReveals);
+window.addEventListener('load', checkReveals);
+checkReveals();
+
+// ----- parallax (transform on scroll) -----
+const pxEls = [...document.querySelectorAll('[data-parallax]')].map(el => ({ el, speed:parseFloat(el.dataset.parallax) }));
+let ticking = false;
+function parallax(){
+  const vh = window.innerHeight;
+  pxEls.forEach(({el,speed}) => {
+    const r = el.getBoundingClientRect();
+    const center = r.top + r.height/2 - vh/2;
+    el.style.transform = 'translate3d(0,' + (center * speed) + 'px,0)';
+  });
+  ticking = false;
+}
+window.addEventListener('scroll', () => { if(!ticking){ requestAnimationFrame(parallax); ticking = true; } }, { passive:true });
+window.addEventListener('resize', parallax);
+parallax();
+
+// ----- About body: scroll-linked char reveal -----
 const revealEl = document.querySelector('[data-charreveal]');
-(function initCharReveal() {
+(function(){
   const text = revealEl.textContent;
   revealEl.textContent = '';
   [...text].forEach(c => {
-    const s = document.createElement('span');
-    s.className = 'ch';
-    s.textContent = c;
-    revealEl.appendChild(s);
+    const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; revealEl.appendChild(s);
   });
 })();
 const chars = revealEl.querySelectorAll('.ch');
-function updateCharReveal() {
+function charReveal(){
   const vh = window.innerHeight;
   const rect = revealEl.getBoundingClientRect();
-  // useScroll offset ['start 0.8','end 0.2'] 와 동일한 구간
-  const start = vh * 0.8, end = vh * 0.2;
+  const start = vh * 0.85, end = vh * 0.3;
   const total = (start - end) + rect.height;
-  const progress = Math.min(1, Math.max(0, (start - rect.top) / total));
+  const prog = Math.min(1, Math.max(0, (start - rect.top) / total));
   const n = chars.length;
-  chars.forEach((c, i) => {
-    const p = i / n;
-    const lo = p - 0.1, hi = p + 0.05;
-    const t = Math.min(1, Math.max(0, (progress - lo) / (hi - lo)));
-    c.style.opacity = (0.2 + t * 0.8).toFixed(3);
+  chars.forEach((c,i) => {
+    const p = i/n, lo = p - 0.08, hi = p + 0.06;
+    const t = Math.min(1, Math.max(0, (prog - lo)/(hi - lo)));
+    c.style.opacity = (0.16 + t * 0.84).toFixed(3);
   });
 }
-window.addEventListener('scroll', updateCharReveal, { passive: true });
-window.addEventListener('resize', updateCharReveal);
-updateCharReveal();
+window.addEventListener('scroll', charReveal, { passive:true });
+window.addEventListener('resize', charReveal);
+charReveal();
 
-// ----- Features 카드: 스케일 + 페이드 스태거 엔트런스 -----
-const cardObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const cardsArr = [...document.querySelectorAll('.card')];
-    const idx = cardsArr.indexOf(e.target);
-    e.target.style.transitionDelay = (idx * 0.15) + 's';
-    e.target.classList.add('visible');
-    cardObserver.unobserve(e.target);
-  });
-}, { rootMargin: '-100px' });
-document.querySelectorAll('.card').forEach(c => cardObserver.observe(c));
+// ----- apply button placeholder -----
+document.getElementById('apply-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  alert('신청 폼 링크를 연결하세요!\n(index.html의 apply-btn href를 Tally/구글폼 URL로 교체)');
+});
 </script>
 </body>
 </html>
